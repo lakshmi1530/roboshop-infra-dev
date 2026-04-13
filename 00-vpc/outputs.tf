@@ -9,6 +9,6 @@ output "private_subnet_ids" {
   value = module.aws_vpc.private_subnet_ids
 }
 
-output "db_subnet_group_name" {
+output "database_subnet_ids" {
   value = module.aws_vpc.database_subnet_ids
 }
