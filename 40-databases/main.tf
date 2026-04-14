@@ -16,7 +16,7 @@ resource "aws_instance" "mongodb" {
 #terraform_data is a custom resource that we are creating to execute the bootstrap script on the mongodb instance after it is created. 
 #We are using the triggers_replace argument to trigger the execution of the bootstrap script whenever the mongodb instance is replaced. 
 
-resource "terraform_data" "" {
+resource "terraform_data" "bootstrap" {
   triggers_replace = [aws_instance.mongodb.id]
   
   #The connection block is used to specify the connection details for the remote-exec provisioner. 
