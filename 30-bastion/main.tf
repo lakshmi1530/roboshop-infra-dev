@@ -4,14 +4,18 @@ resource "aws_instance" "bastion" {
   subnet_id     = local.public_subnet_ids
   vpc_security_group_ids = [local.bastion_sg_id]
   iam_instance_profile = aws_iam_instance_profile.bastion.name
-
-   # Using user_data to install Terraform on the instance itself
-  user_data = <<-EOF
-              #!/bin/bash
-              sudo yum install -y yum-utils
-              sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
-              sudo yum -y install terraform
-              EOF
+  user_data = file("bootstrap.sh")
+  root_block_device {
+    volume_size = 50
+    volume_type = "gp3"
+    # EBS volume tags
+    tags = merge(
+      {
+          Name = "${var.project}-${var.environment}-bastion"
+      },
+    local.common_tags
+    )
+  }
 
   tags = merge(
     local.common_tags, 
